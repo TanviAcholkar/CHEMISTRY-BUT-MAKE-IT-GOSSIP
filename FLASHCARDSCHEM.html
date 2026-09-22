@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Gossip — Chemistry, but make it Gossip</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========== RESET & BASE ========== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #FFF8FA;
+            color: #3D3D3D;
+            line-height: 1.7;
+            font-weight: 500;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(248,164,184,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(200,162,212,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(168,216,234,0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        ::selection {
+            background: #F8A4B8;
+            color: #fff;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FFF0F3; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #F8A4B8, #C8A2D4);
+            border-radius: 10px;
+        }
+
+        /* ========== NAVIGATION ========== */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(248,164,184,0.15);
+            padding: 0 24px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+        }
+
+        .nav-logo {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #6B4C6E;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .nav-logo span {
+            font-size: 1.3rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .nav-links::-webkit-scrollbar { display: none; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #7B7B7B;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 50px;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            letter-spacing: 0.01em;
+        }
+
+        .nav-links a:hover {
+            color: #6B4C6E;
+            background: rgba(248,164,184,0.1);
+        }
+
+        .nav-links a.active {
+            color: #fff;
+            background: linear-gradient(135deg, #F8A4B8, #C8A2D4);
+        }
+
+        /* ========== HERO / HOMEPAGE ========== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(248,164,184,0.1);
+            border: 1px solid rgba(248,164,184,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #B06A8A;
+            margin-bottom: 32px;
+            animation: fadeInDown 0.8s ease both;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-weight: 700;
+            color: #3D2B40;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease 0.1s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, #F8A4B8, #C8A2D4, #A8D8EA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: #8B8B8B;
+            max-width: 560px;
+            margin-bottom: 56px;
+            font-weight: 500;
+            animation: fadeInDown 0.8s ease 0.2s both;
+        }
+
+        /* Category Cards Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 1080px;
+            width: 100%;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .category-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px 28px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            border-radius: 20px 20px 0 0;
+            transition: height 0.4s ease;
+        }
+
+        .category-card:hover::before {
+            height: 6px;
+        }
+
+        .category-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+
+        .cat-toxic::before { background: linear-gradient(90deg, #F8A4B8, #FFD1DC); }
+        .cat-besties::before { background: linear-gradient(90deg, #C8A2D4, #E6D5F0); }
+        .cat-overreactors::before { background: linear-gradient(90deg, #F5C5A3, #FFE0CC); }
+        .cat-daily::before { background: linear-gradient(90deg, #A8D8EA, #C5E8F5); }
+
+        .category-card .cat-emoji {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+
+        .category-card .cat-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #3D2B40;
+        }
+
+        .category-card .cat-desc {
+            font-size: 0.82rem;
+            color: #9B9B9B;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .category-card .cat-count {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #B0B0B0;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: auto;
+        }
+
+        /* Decorative floating elements */
+        .deco {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .deco-1 {
+            width: 300px; height: 300px;
+            background: #F8A4B8;
+            top: 10%; left: -5%;
+            animation: floatSlow 8s ease-in-out infinite;
+        }
+
+        .deco-2 {
+            width: 200px; height: 200px;
+            background: #C8A2D4;
+            top: 60%; right: -3%;
+            animation: floatSlow 10s ease-in-out infinite reverse;
+        }
+
+        .deco-3 {
+            width: 150px; height: 150px;
+            background: #A8D8EA;
+            bottom: 10%; left: 15%;
+            animation: floatSlow 7s ease-in-out infinite 1s;
+        }
+
+        .scroll-hint {
+            margin-top: 48px;
+            animation: fadeInUp 0.8s ease 0.5s both;
+            color: #C0C0C0;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .scroll-hint .arrow {
+            display: block;
+            margin-top: 8px;
+            font-size: 1.2rem;
+            animation: bounce 2s ease infinite;
+        }
+
+        /* ========== SECTION STYLES ========== */
+        .section {
+            padding: 100px 24px 80px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .section-emoji {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 700;
+            color: #3D2B40;
+            margin-bottom: 12px;
+        }
+
+        .section-desc {
+            font-size: 0.95rem;
+            color: #9B9B9B;
+            max-width: 500px;
+            margin: 0 auto;
+            font-weight: 500;
+        }
+
+        /* Section color themes */
+        .section-toxic .section-title { color: #A8506E; }
+        .section-besties .section-title { color: #7B5A8A; }
+        .section-overreactors .section-title { color: #A07040; }
+        .section-daily .section-title { color: #4A7A90; }
+
+        .section-divider {
+            text-align: center;
+            margin: 0 auto 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            max-width: 300px;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+        }
+
+        .section-toxic .section-divider::before,
+        .section-toxic .section-divider::after { background: rgba(248,164,184,0.3); }
+        .section-besties .section-divider::before,
+        .section-besties .section-divider::after { background: rgba(200,162,212,0.3); }
+        .section-overreactors .section-divider::before,
+        .section-overreactors .section-divider::after { background: rgba(245,197,163,0.3); }
+        .section-daily .section-divider::before,
+        .section-daily .section-divider::after { background: rgba(168,216,234,0.3); }
+
+        .section-divider span {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .section-toxic .section-divider span { color: #F8A4B8; }
+        .section-besties .section-divider span { color: #C8A2D4; }
+        .section-overreactors .section-divider span { color: #F5C5A3; }
+        .section-daily .section-divider span { color: #A8D8EA; }
+
+        /* ========== FLASHCARD GRID (Pinterest Masonry) ========== */
+        .flashcard-grid {
+            columns: 2;
+            column-gap: 20px;
+        }
+
+        /* ========== FLASHCARD (details/summary) ========== */
+        details {
+            break-inside: avoid;
+            margin-bottom: 20px;
+            border-radius: 18px;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: 0 2px 16px rgba(0,0,0,0.035);
+            overflow: hidden;
+            transition: all 0.35s ease;
+            animation: fadeInUp 0.6s ease both;
+        }
+
+        details:nth-child(1) { animation-delay: 0.05s; }
+        details:nth-child(2) { animation-delay: 0.1s; }
+        details:nth-child(3) { animation-delay: 0.15s; }
+        details:nth-child(4) { animation-delay: 0.2s; }
+
+        details:hover {
+            box-shadow: 0 6px 30px rgba(0,0,0,0.06);
+        }
+
+        details[open] {
+            box-shadow: 0 8px 36px rgba(0,0,0,0.07);
+        }
+
+        /* Summary (card front) */
+        summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 22px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: background 0.3s ease;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+        summary::marker { display: none; content: ''; }
+
+        summary:hover {
+            background: rgba(0,0,0,0.01);
+        }
+
+        .card-emoji {
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .card-question {
+            flex: 1;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #3D2B40;
+            line-height: 1.5;
+        }
+
+        .card-toggle {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            transition: all 0.35s ease;
+            margin-top: 1px;
+        }
+
+        .section-toxic .card-toggle { background: rgba(248,164,184,0.12); color: #E88AA0; }
+        .section-besties .card-toggle { background: rgba(200,162,212,0.12); color: #A880BC; }
+        .section-overreactors .card-toggle { background: rgba(245,197,163,0.12); color: #D4A070; }
+        .section-daily .card-toggle { background: rgba(168,216,234,0.12); color: #70A8C0; }
+
+        details[open] .card-toggle {
+            transform: rotate(180deg);
+        }
+
+        /* Card content (back) */
+        .card-content {
+            padding: 0 24px 24px;
+            animation: expandIn 0.35s ease both;
+        }
+
+        @keyframes expandIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gossip-section {
+            background: #FFFAF5;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(245,197,163,0.15);
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .gossip-label {
+            color: #D4903C;
+        }
+
+        .real-label {
+            color: #6B8A7A;
+        }
+
+        .gossip-text {
+            font-size: 0.88rem;
+            color: #6B5B50;
+            line-height: 1.75;
+            font-weight: 500;
+        }
+
+        .real-section {
+            background: #F5FAF8;
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid rgba(107,138,122,0.12);
+        }
+
+        .real-text {
+            font-size: 0.84rem;
+            color: #5A6B62;
+            line-height: 1.75;
+            font-weight: 500;
+        }
+
+        /* ========== BACK TO TOP ========== */
+        .back-to-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #B0B0B0;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            padding: 12px 0;
+            margin-top: 48px;
+            transition: color 0.3s ease;
+        }
+
+        .back-to-top:hover {
+            color: #6B4C6E;
+        }
+
+        .back-to-top-wrap {
+            text-align: center;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            text-align: center;
+            padding: 60px 24px 40px;
+            border-top: 1px solid rgba(0,0,0,0.04);
+            margin-top: 40px;
+        }
+
+        .footer-emoji {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+
+        .footer-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #6B4C6E;
+            margin-bottom: 8px;
+        }
+
+        .footer-text {
+            font-size: 0.8rem;
+            color: #B0B0B0;
+            font-weight: 500;
+            line-height: 1.8;
+        }
+
+        .footer-text a {
+            color: #C8A2D4;
+            text-decoration: none;
+        }
+
+        .footer-hearts {
+            margin-top: 16px;
+            font-size: 0.85rem;
+            color: #F8A4B8;
+        }
+
+        /* ========== SECTION SEPARATOR ========== */
+        .section-sep {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 1rem;
+            color: #DDD;
+            letter-spacing: 0.3em;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.03); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(6px); }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .nav-inner { height: 60px; }
+            .nav-logo { font-size: 1rem; }
+            .nav-links a { font-size: 0.76rem; padding: 6px 10px; }
+
+            .hero { padding: 100px 20px 60px; }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .category-card {
+                padding: 24px 22px;
+                flex-direction: row;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .category-card .cat-desc { display: none; }
+            .category-card .cat-count { margin-top: 0; }
+
+            .category-card .cat-right {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                flex: 1;
+            }
+
+            .section { padding: 72px 16px 60px; }
+            .flashcard-grid { columns: 1; }
+
+            .card-content { padding: 0 18px 18px; }
+            summary { padding: 18px; gap: 12px; }
+
+            .deco { display: none; }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .flashcard-grid { columns: 2; }
+        }
+
+        @media (min-width: 1025px) {
+            .flashcard-grid { columns: 2; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#home" class="nav-logo">
+                <span>⚗️</span> Chemistry Gossip
+            </a>
+            <div class="nav-links">
+                <a href="#home" class="active">Home</a>
+                <a href="#toxic">💀 Toxic Relationships</a>
+                <a href="#besties">💖 Besties</a>
+                <a href="#overreactors">🔥 Overreactors</a>
+                <a href="#daily">☕ Daily Life Drama</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HERO / HOMEPAGE ========== -->
+    <section class="hero" id="home">
+        <div class="deco deco-1"></div>
+        <div class="deco deco-2"></div>
+        <div class="deco deco-3"></div>
+
+        <div class="hero-badge">🧪 Making Chemistry Easy Using Technology</div>
+
+        <h1>
+            Chemistry, but<br>make it <span class="gradient-text">Gossip</span>
+        </h1>
+
+        <p class="hero-subtitle">
+            Forget boring definitions. We're explaining science through drama, humor, and real-life tea. Because who said learning can't be fun?
+        </p>
+
+        <div class="category-grid">
+            <a href="#toxic" class="category-card cat-toxic">
+                <span class="cat-emoji">💀</span>
+                <div class="cat-right">
+                    <span class="cat-title">Toxic Relationships</span>
+                    <span class="cat-desc">Acids, bases, and the reactions that just can't let go.</span>
+                    <span class="cat-count">4 Flashcards →</span>
+                </div>
+            </a>
+            <a href="#besties" class="category-card cat-besties">
+                <span class="cat-emoji">💖</span>
+                <div class="cat-right">
+                    <span class="cat-title">Besties</span>
+                    <span class="cat-desc">Chemical bonding, stable compounds, and friendship goals.</span>
+                    <span class="cat-count">4 Flashcards →</span>
+                </div>
+            </a>
+            <a href="#overreactors" class="category-card cat-overreactors">
+                <span class="cat-emoji">🔥</span>
+                <div class="cat-right">
+                    <span class="cat-title">Overreactors</span>
+                    <span class="cat-desc">Highly reactive elements who always take it too far.</span>
+                    <span class="cat-count">4 Flashcards →</span>
+                </div>
+            </a>
+            <a href="#daily" class="category-card cat-daily">
+                <span class="cat-emoji">☕</span>
+                <div class="cat-right">
+                    <span class="cat-title">Daily Life Drama</span>
+                    <span class="cat-desc">Chemistry hiding in your kitchen, bathroom, and coffee cup.</span>
+                    <span class="cat-count">4 Flashcards →</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="scroll-hint">
+            Scroll to start the drama
+            <span class="arrow">↓</span>
+        </div>
+    </section>
+
+    <!-- ========== TOXIC RELATIONSHIPS ========== -->
+    <div class="section-sep">· · · ✦ · · ·</div>
+
+    <section class="section section-toxic" id="toxic">
+        <div class="section-header">
+            <span class="section-emoji">💀</span>
+            <h2 class="section-title">Toxic Relationships</h2>
+            <p class="section-desc">Acids, bases, and the kind of chemistry your therapist would call "concerning."</p>
+        </div>
+
+        <div class="section-divider"><span>Acids &amp; Bases</span></div>
+
+        <div class="flashcard-grid">
+            <!-- Card 1 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">🧪</span>
+                    <span class="card-question">Why does HCl act like it hates absolutely everything?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">HCl is literally that friend who walks into a room and immediately starts roasting everyone. It donates protons (H⁺) like it's handing out insults — no filter, no mercy. Metals? Dissolved. Bases? Neutralized. Your favorite shirt? A hole. It's the definition of "if I'm unhappy, everyone's unhappy." And the drama doesn't stop — it fumes in the air just to make an entrance. Iconic behavior, honestly.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Hydrochloric acid is a strong acid that completely dissociates in water, releasing H⁺ ions. It reacts vigorously with metals, bases, and carbonates. It's found naturally in stomach acid (pH ~1.5) to help digest food and kill bacteria.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 2 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">💔</span>
+                    <span class="card-question">What happens when an acid and base finally talk it out?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Picture two exes meeting at a party. One's spitting fire (acid), the other's ice cold (base). They collide and — plot twist — neutralize each other into the most boring couple ever: salt and water. No drama, no sparks, just… table salt and a glass of water. It's the chemical equivalent of "we're better off as friends." Even the energy gets cancelled out. Zero chemistry left. Literally.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">When an acid reacts with a base, a neutralization reaction occurs, producing salt and water. Example: HCl + NaOH → NaCl + H₂O. The H⁺ from the acid combines with OH⁻ from the base to form water, and the pH moves toward 7 (neutral). Heat is usually released (exothermic).</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 3 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">🧹</span>
+                    <span class="card-question">Why is NaOH the ultimate "fixer" of the chemistry world?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">NaOH is that one friend who shows up with a mop and says "I'll handle it." Spilled acid? Fixed. Greasy kitchen? Fixed. Clogged drain? FIXED. It doesn't ask questions, it doesn't judge — it just neutralizes everything in its path like a emotional support base. But don't get on its bad side… it will literally dissolve your skin. Loyal but lethal — the most dangerous kind of bestie.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Sodium hydroxide (NaOH) is a strong base that fully dissociates in water to give OH⁻ ions. It's used in cleaning products, drain openers, and soap making (saponification). It's highly alkaline (pH ~14) and can cause severe chemical burns on contact with skin — always handle with protection.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 4 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">🇨🇭</span>
+                    <span class="card-question">Why does pH 7 absolutely refuse to take sides?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">pH 7 is Switzerland — completely neutral, zero opinions, no drama. Acids slide up to 0? "Not my problem." Bases push to 14? "Still not my problem." Pure water lives here, and honestly, we respect the boundary-setting. In a world full of extremes, pH 7 is just sipping water and minding its business. It's the friend who stays out of group chat drama and somehow survives every fallout unscathed. Goals.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">pH 7 is neutral on the pH scale (0–14). Pure water has equal concentrations of H⁺ and OH⁻ ions (10⁻⁷ M each), making it neither acidic nor basic. The pH scale is logarithmic — each unit represents a 10× change in H⁺ concentration. pH 7 means [H⁺] = [OH⁻] = 10⁻⁷ mol/L.</p>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <div class="back-to-top-wrap">
+            <a href="#home" class="back-to-top">↑ Back to Top</a>
+        </div>
+    </section>
+
+    <!-- ========== BESTIES ========== -->
+    <div class="section-sep">· · · ✦ · · ·</div>
+
+    <section class="section section-besties" id="besties">
+        <div class="section-header">
+            <span class="section-emoji">💖</span>
+            <h2 class="section-title">Besties</h2>
+            <p class="section-desc">Chemical bonding, stable compounds, and the kind of loyalty we all aspire to.</p>
+        </div>
+
+        <div class="section-divider"><span>Bonding &amp; Stability</span></div>
+
+        <div class="flashcard-grid">
+            <!-- Card 1 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">💅</span>
+                    <span class="card-question">Why are noble gases the "single forever" type?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Helium, Neon, Argon — they're at every party standing in the corner, completely unbothered. Their outer shell is FULL, their vibe is "I don't need anyone," and honestly? We respect it. They won't bond, they won't react, they won't even acknowledge other elements. They're the chemistry equivalent of "I'm not looking for anything serious right now" — except they actually mean it. Other elements are out here desperate for electrons, and noble gases are just… thriving alone. Self-care at its finest.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Noble gases (Group 18: He, Ne, Ar, Kr, Xe, Rn) have complete valence electron shells (2 or 8 electrons), making them extremely stable and chemically inert. They have very high ionization energies and almost zero electron affinity, so they rarely form compounds. They exist as monatomic gases.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 2 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">🎁</span>
+                    <span class="card-question">Why does Na literally give away its electron to anyone?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Sodium has ONE electron it's been trying to get rid of since day one. It's like holding a hot potato — the second Chlorine walks by, Na is like "PLEASE take this, I'm begging you." And just like that, they're bonded. Na gets to relax, Cl gets what it wants. It's not love — it's mutual convenience, and honestly, aren't all relationships? Na doesn't even care WHO takes it. Fluorine? Sure. Oxygen? Why not. Desperate times, desperate bonds.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Sodium (Na, atomic number 11) has one valence electron in its 3s orbital that it easily loses to achieve a stable octet configuration (like neon). This forms the Na⁺ ion. It readily forms ionic bonds — with chlorine (NaCl table salt), with oxygen (Na₂O), and more. Its low ionization energy (496 kJ/mol) makes electron loss very favorable.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 3 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">💧</span>
+                    <span class="card-question">What makes H₂O the most popular friend group ever?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Water shows up EVERYWHERE — your coffee, your blood, your tears, literally 60% of you. It's got two besties (hydrogen and oxygen) holding hands so tight they're basically inseparable. It dissolves drama better than any therapist, mixes with more substances than a social butterfly, and still has the audacity to be called "universal solvent." The hydrogen atoms and oxygen are locked in a covalent embrace, sharing electrons like secrets at a sleepover. The connections, honestly.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Water (H₂O) is the "universal solvent" because of its polar nature. Oxygen is more electronegative than hydrogen, creating a dipole — partial negative charge (δ⁻) on O and partial positive charges (δ⁺) on H. This polarity allows water to dissolve ionic compounds (like NaCl) and polar molecules by surrounding and separating them. Water also exhibits hydrogen bonding, giving it unusually high boiling point and surface tension.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 4 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">💍</span>
+                    <span class="card-question">Why is diamond's bond literally unbreakable, but graphite is so… easy?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Diamond and graphite are BOTH made of carbon — same element, completely different vibes. Diamond's carbon atoms are locked in a 3D grip like a jealous partner who won't let go. Every atom holds hands with FOUR others in a rigid crystal lattice. "Where are you going?" "Nowhere. We're bonded forever." Meanwhile, graphite's atoms are layered like a messy group chat — easy to slide apart. Same DNA, wildly different commitment levels. Diamond is marriage. Graphite is situationship.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Both are allotropes of carbon. Diamond has a tetrahedral structure where each carbon forms four strong covalent bonds in a 3D network (hardness ~10 on Mohs scale). Graphite has a layered hexagonal structure — each carbon bonds with only three neighbors, with weak van der Waals forces between layers, making it soft and slippery (used in pencils and lubricants).</p>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <div class="back-to-top-wrap">
+            <a href="#home" class="back-to-top">↑ Back to Top</a>
+        </div>
+    </section>
+
+    <!-- ========== OVERREACTORS ========== -->
+    <div class="section-sep">· · · ✦ · · ·</div>
+
+    <section class="section section-overreactors" id="overreactors">
+        <div class="section-header">
+            <span class="section-emoji">🔥</span>
+            <h2 class="section-title">Overreactors</h2>
+            <p class="section-desc">Highly reactive elements who always take things way too far. Every. Single. Time.</p>
+        </div>
+
+        <div class="section-divider"><span>Reactivity Series</span></div>
+
+        <div class="flashcard-grid">
+            <!-- Card 1 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">💥</span>
+                    <span class="card-question">Why does potassium throw an absolute tantrum in water?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Drop potassium in water and it LOSES. ITS. MIND. It dances, it sizzles, it catches fire, it throws hydrogen gas everywhere — absolute chaos. It's like that friend who gets one text and spirals into a full meltdown. The more you go down Group 1, the worse it gets. Lithium's a gentle fizz, sodium's a drama queen, potassium's a full crisis, and Cesium? Doesn't just react — it EXPLODES. Generational trauma, but make it chemical.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Potassium (K) reacts violently with water: 2K + 2H₂O → 2KOH + H₂↑. The reaction is so exothermic that the hydrogen gas ignites, producing a lilac-colored flame (potassium's signature flame test color). Reactivity increases down Group 1 because the outermost electron is farther from the nucleus and easier to lose (lower ionization energy, larger atomic radius).</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 2 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">😤</span>
+                    <span class="card-question">Why is fluorine the most jealous element in the entire periodic table?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Fluorine wants EVERYONE'S electrons. Not some — ALL. It's the most electronegative element, meaning it pulls electrons harder than your mom pulls you out of a bad relationship. It doesn't share, it doesn't negotiate — it takes. Even oxygen side-eyes fluorine like "girl, calm down." There's a reason it sits at the top right of the periodic table — watching everyone like a hawk from its corner office. It reacted with noble gases. NOBLE GASES. It has zero respect for boundaries.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Fluorine has the highest electronegativity (3.98 on Pauling scale) of all elements. With 7 valence electrons, it desperately needs one more to complete its octet, making it the strongest oxidizing agent known. It reacts with almost every element (including noble gases like xenon under specific conditions) and even explosively with water. Its small atomic size and high nuclear charge create an intense pull on electrons.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 3 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">🛢️</span>
+                    <span class="card-question">Why does sodium need anger management classes?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Sodium is out here reacting with literally ANYTHING — air, water, your skin, halogens, even the container you put it in. You have to store it under OIL because it can't handle being exposed to oxygen. That's not a chemistry problem, that's a behavioral issue. It saw water once and created enough heat to melt itself. Seek help, Na. Your family (Group 1) has a documented history of this — it's generational. Lithium started it, sodium escalated, and nobody stopped it.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Sodium (Na) is a soft, silvery alkali metal that must be stored under oil to prevent reaction with atmospheric moisture and oxygen. It reacts with water: 2Na + 2H₂O → 2NaOH + H₂↑, releasing enough heat (exothermic, ΔH = −368 kJ/mol) to sometimes ignite the hydrogen. With air, it forms sodium oxide (Na₂O) and sodium peroxide (Na₂O₂). Its single 3s¹ valence electron makes it extremely reactive.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 4 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">🎬</span>
+                    <span class="card-question">Why does cesium react like it's being filmed for a reality show?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">If potassium is dramatic, cesium is straight-up unhinged. Drop it in water and it doesn't just react — it performs. A massive explosion, a shockwave, shattered glass — the whole production. Scientists have to handle it in special sealed rooms because this element does NOT believe in subtlety. It's the "main character syndrome" of the periodic table. Every reaction is its Oscar moment. Francium would be worse, but it's so radioactive it literally can't exist long enough to cause drama. Tragic, really.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Cesium (Cs) is the most reactive naturally occurring alkali metal (Group 1, period 6). Its single 6s¹ valence electron is very far from the nucleus (large atomic radius ~265 pm), shielded by many inner electron shells, making it extremely easy to lose (lowest ionization energy: 376 kJ/mol). The water reaction 2Cs + 2H₂O → 2CsOH + H₂ releases so much energy instantaneously that it causes a violent explosion — far more intense than sodium or potassium.</p>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <div class="back-to-top-wrap">
+            <a href="#home" class="back-to-top">↑ Back to Top</a>
+        </div>
+    </section>
+
+    <!-- ========== DAILY LIFE DRAMA ========== -->
+    <div class="section-sep">· · · ✦ · · ·</div>
+
+    <section class="section section-daily" id="daily">
+        <div class="section-header">
+            <span class="section-emoji">☕</span>
+            <h2 class="section-title">Daily Life Drama</h2>
+            <p class="section-desc">Chemistry hiding in your kitchen, bathroom, and coffee cup. It's everywhere, bestie.</p>
+        </div>
+
+        <div class="section-divider"><span>Everyday Chemistry</span></div>
+
+        <div class="flashcard-grid">
+            <!-- Card 1 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">🍞</span>
+                    <span class="card-question">Why does your bread rise like it's got attitude?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Yeast is the tiny drama queen living in your dough. You feed it sugar, give it warmth, and it starts BURPING carbon dioxide like it just ate a three-course meal. Those burps get trapped in the gluten network (which is basically stretchy scaffolding), and the bread puffs up like it just got told it looks skinny. No magic — just microbes with gas. When you bake it, the heat kills the yeast (RIP, you served well) and sets everything in place. A beautiful, gassy tragedy.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Yeast (Saccharomyces cerevisiae, a fungus) performs anaerobic respiration (fermentation): C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂↑. The CO₂ gas gets trapped in the gluten protein network of the dough, causing it to rise (leavening). During baking (180–220°C), the heat kills the yeast, evaporates the ethanol, coagulates the gluten proteins, and gelatinizes the starch — giving bread its final fluffy, firm texture.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 2 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">🧼</span>
+                    <span class="card-question">Why does soap act like a peacekeeper between oil and water?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Oil and water have beef — everyone knows this. They refuse to mix at parties, sit on opposite sides of the room, the whole thing. Enter soap, the ultimate mediator. One end of soap loves water ("water is my bestie"), the other end loves oil ("oil is ALSO my bestie"). It grabs oil molecules, drags them into water like "you WILL get along," and suddenly your greasy pan is clean. Diplomacy, but make it molecules. Soap is the friend who forces you to talk to your enemy. And it works every time.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Soap molecules are amphiphilic — they have a polar hydrophilic "head" (attracted to water) and a non-polar lipophilic "tail" (attracted to oil/grease). In water, soap molecules arrange into micelles — spherical structures with tails pointing inward (trapping oil) and heads facing outward (interacting with water). This process, called emulsification, allows grease to be dispersed in water and washed away. Soap is made via saponification: fat + NaOH → soap + glycerol.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 3 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">🔩</span>
+                    <span class="card-question">Why does iron get rusty after one "breakup" with air?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Iron meets oxygen and water and immediately catches feelings — BAD feelings. It forms rust (iron oxide) which is flaky, ugly, and weak. It's like iron's version of a toxic situationship — the more time they spend together, the worse iron looks. The rust flakes off, exposing fresh iron underneath, and the cycle continues. It's self-destructive behavior, honestly. Meanwhile, aluminum forms a protective layer and moves on like a mature adult. Iron really needs to learn from aluminum's boundaries.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Rusting is an electrochemical oxidation process: 4Fe + 3O₂ + 6H₂O → 4Fe(OH)₃, which dehydrates to Fe₂O₃·nH₂O (hydrated iron oxide / rust). Unlike aluminum oxide (Al₂O₃), which forms a thin, hard, adherent protective layer, rust is porous and flakes off — exposing fresh iron to further corrosion. This is why rusting is progressive and destructive. Prevention methods include painting, galvanizing (zinc coating), and alloying (stainless steel with chromium).</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Card 4 -->
+            <details>
+                <summary>
+                    <span class="card-emoji">😂</span>
+                    <span class="card-question">Why does coffee keep you up like a toxic ex who won't leave?</span>
+                    <span class="card-toggle">▼</span>
+                </summary>
+                <div class="card-content">
+                    <div class="gossip-section">
+                        <div class="section-label gossip-label">🍵 The Gossip</div>
+                        <p class="gossip-text">Caffeine slides into your brain like "hey bestie 👋" and blocks adenosine — the molecule that's supposed to tell you "go to sleep, it's 2 AM." So your brain never gets the "tired" memo. You feel ENERGIZED but you're actually running on borrowed time and fake confidence. When caffeine finally leaves? Adenosine rushes back like "WHERE WERE YOU?!" and you crash harder than your last situationship. The half-life is 5-6 hours, so that 3 PM coffee is literally still lurking in your system at 9 PM. Sabotage.</p>
+                    </div>
+                    <div class="real-section">
+                        <div class="section-label real-label">📖 Real Explanation</div>
+                        <p class="real-text">Caffeine (C₈H₁₀N₄O₂) has a similar molecular structure to adenosine, a neurotransmitter that gradually accumulates during waking hours and binds to A1 receptors to promote sleepiness. Caffeine competitively binds to these receptors without activating them — blocking the sleep signal. This triggers increased dopamine and adrenaline, enhancing alertness. With a half-life of ~5-6 hours, caffeine lingers in the body. Once metabolized by the liver (CYP1A2 enzyme), accumulated adenosine floods the receptors, causing the "caffeine crash."</p>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <div class="back-to-top-wrap">
+            <a href="#home" class="back-to-top">↑ Back to Top</a>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <div class="footer-emoji">🧪✨</div>
+        <p class="footer-title">Chemistry Gossip</p>
+        <p class="footer-text">
+            A chemistry project making science fun, one dramatic story at a time.<br>
+            Built with ❤️, HTML, CSS, and zero JavaScript.<br>
+            Theme: <a href="#home">Making Chemistry Easy Using Technology</a>
+        </p>
+        <p class="footer-hearts">♥ ♥ ♥</p>
+    </footer>
+
+</body>
+</html>
